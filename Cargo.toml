@@ -1,0 +1,16 @@
+[package]
+name = "Rust_OS"
+version = "0.1.0"
+edition = "2018"
+authors = ["Hadi Haider <haiderhadi055@gmail.com>"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
