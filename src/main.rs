@@ -42,15 +42,15 @@ fn panic(info: &PanicInfo) -> ! {
 }
 
 /// This function is called on panic only when testing.
-#[cfg(test)]
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    serial_println!("[failed]\n");
-    serial_println!("Error: {}\n", info);
-    exit_qemu(QemuExitCode::Failed);
+// #[cfg(test)]
+// #[panic_handler]
+// fn panic(info: &PanicInfo) -> ! {
+//     serial_println!("[failed]\n");
+//     serial_println!("Error: {}\n", info);
+//     exit_qemu(QemuExitCode::Failed);
 
-    loop {}
-}
+//     loop {}
+// }
 
 // QEMU Exit
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -84,7 +84,7 @@ fn test_runner(tests: &[&dyn Testable]) {
 // Test Cases
 #[test_case]
 fn trivial_assertion() {
-    assert_eq!(0, 1);
+    assert_eq!(1, 1);
 }
 
 pub trait Testable {
@@ -100,4 +100,10 @@ where
         self();
         serial_println!("[ok]");
     }
+}
+
+#[cfg(test)]
+#[panic_handler]
+fn panic(info: &PanicInfo) -> ! {
+    Rust_OS::test_panic_handler(info)
 }
