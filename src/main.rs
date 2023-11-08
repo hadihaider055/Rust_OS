@@ -20,6 +20,11 @@ pub extern "C" fn _start() -> ! {
 
     // panic!("I am panicking huhuhuhu!!!");
 
+    // EXCEPTIONS
+    Rust_OS::init();
+
+    x86_64::instructions::interrupts::int3();
+
     #[cfg(test)]
     test_main();
 
@@ -30,6 +35,7 @@ pub extern "C" fn _start() -> ! {
     //     }
     // }
 
+    println!("It did not crash!");
     loop {}
 }
 
