@@ -7,6 +7,8 @@
 
 use core::panic::PanicInfo;
 
+use x86_64::instructions::hlt;
+
 pub mod gdt;
 pub mod interrupts;
 pub mod serial;
@@ -39,6 +41,8 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
     serial_println!("[failed]\n");
     serial_println!("Error: {}\n", info);
     exit_qemu(QemuExitCode::Failed);
+    hlt_loop();
+
     loop {}
 }
 
@@ -58,10 +62,18 @@ pub fn exit_qemu(exit_code: QemuExitCode) {
     }
 }
 
+pub fn hlt_loop() -> ! {
+    loop {
+        x86_64::instructions::hlt();
+    }
+}
+
 // EXCEPTIONS
 pub fn init() {
     gdt::init();
     interrupts::init_idt();
+    unsafe { interrupts::PICS.lock().initialize() };
+    x86_64::instructions::interrupts::enable();
 }
 
 /// Entry point for `cargo xtest`
@@ -70,6 +82,7 @@ pub fn init() {
 pub extern "C" fn _start() -> ! {
     init();
     test_main();
+    hlt_loop();
 
     loop {}
 }

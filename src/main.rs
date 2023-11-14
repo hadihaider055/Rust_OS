@@ -23,11 +23,11 @@ pub extern "C" fn _start() -> ! {
     // EXCEPTIONS
     Rust_OS::init();
 
-    fn stack_overflow() {
-        stack_overflow();
-    }
+    // fn stack_overflow() {
+    //     stack_overflow();
+    // }
 
-    stack_overflow();
+    // stack_overflow();
 
     // x86_64::instructions::interrupts::int3();
 
@@ -47,7 +47,12 @@ pub extern "C" fn _start() -> ! {
     // }
 
     println!("It did not crash!");
-    loop {}
+    Rust_OS::hlt_loop();
+
+    loop {
+        use Rust_OS::print;
+        print!("-");
+    }
 }
 
 /// This function is called on panic but not when testing.
@@ -55,6 +60,8 @@ pub extern "C" fn _start() -> ! {
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
+    Rust_OS::hlt_loop();
+
     loop {}
 }
 
