@@ -19,7 +19,7 @@ features = ["spin_no_std"]
 
 
 [[test]]
-name = "should_panic"
+name = "stack_overflow" # should_panic or stack_overflow
 harness = false
 
 # [profile.dev]
